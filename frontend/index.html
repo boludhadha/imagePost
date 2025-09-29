@@ -1,56 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Hosting Service</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Image Hosting Service</h1>
-        <p class="subtitle">Upload your image and get a shareable URL</p>
-
-        <div class="upload-section">
-            <form id="uploadForm">
-                <div class="file-input-wrapper">
-                    <input type="file" id="fileInput" accept="image/*" required>
-                    <label for="fileInput" id="fileLabel">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="17 8 12 3 7 8"></polyline>
-                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
-                        <span>Click to select an image</span>
-                    </label>
-                </div>
-                <button type="submit" id="uploadBtn" disabled>Upload Image</button>
-            </form>
-
-            <div id="loading" class="loading hidden">
-                <div class="spinner"></div>
-                <p>Uploading...</p>
-            </div>
-
-            <div id="result" class="result hidden">
-                <div class="success-icon">✓</div>
-                <h3>Upload Successful!</h3>
-                <div class="url-box">
-                    <input type="text" id="imageUrl" readonly>
-                    <button id="copyBtn">Copy</button>
-                </div>
-                <div class="preview">
-                    <img id="previewImage" alt="Uploaded image">
-                </div>
-                <button id="uploadAnother">Upload Another Image</button>
-            </div>
-
-            <div id="error" class="error hidden">
-                <p id="errorMessage"></p>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
