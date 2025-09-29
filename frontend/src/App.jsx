@@ -39,6 +39,12 @@ function App() {
       setSelectedFile(file)
       setError('')
       setUploadedUrl('')
+
+      // Update the file input to sync with drag & drop
+      const fileInput = document.getElementById('fileInput')
+      const dataTransfer = new DataTransfer()
+      dataTransfer.items.add(file)
+      fileInput.files = dataTransfer.files
     } else {
       setError('Please drop an image file')
     }
