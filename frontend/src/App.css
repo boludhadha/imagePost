@@ -69,6 +69,17 @@ label[for="fileInput"].file-selected span {
   color: #48bb78;
 }
 
+label[for="fileInput"].dragging {
+  border-color: #764ba2;
+  background: #ede9fe;
+  transform: scale(1.02);
+}
+
+label[for="fileInput"].dragging svg,
+label[for="fileInput"].dragging span {
+  color: #764ba2;
+}
+
 button[type="submit"],
 .upload-another {
   width: 100%;

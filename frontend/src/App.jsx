@@ -9,6 +9,7 @@ function App() {
   const [uploadedUrl, setUploadedUrl] = useState('')
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0]
@@ -16,6 +17,30 @@ function App() {
       setSelectedFile(file)
       setError('')
       setUploadedUrl('')
+    }
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+
+    const file = e.dataTransfer.files[0]
+    if (file && file.type.startsWith('image/')) {
+      setSelectedFile(file)
+      setError('')
+      setUploadedUrl('')
+    } else {
+      setError('Please drop an image file')
     }
   }
 
@@ -75,7 +100,12 @@ function App() {
         {!uploadedUrl ? (
           <>
             <form onSubmit={handleUpload}>
-              <div className="file-input-wrapper">
+              <div
+                className="file-input-wrapper"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
                 <input
                   type="file"
                   id="fileInput"
@@ -85,7 +115,7 @@ function App() {
                 />
                 <label
                   htmlFor="fileInput"
-                  className={selectedFile ? 'file-selected' : ''}
+                  className={`${selectedFile ? 'file-selected' : ''} ${isDragging ? 'dragging' : ''}`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +133,11 @@ function App() {
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                   </svg>
                   <span>
-                    {selectedFile ? selectedFile.name : 'Click to select an image'}
+                    {isDragging
+                      ? 'Drop image here'
+                      : selectedFile
+                        ? selectedFile.name
+                        : 'Click or drag & drop an image'}
                   </span>
                 </label>
               </div>
