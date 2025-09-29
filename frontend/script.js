@@ -1,5 +1,5 @@
 // Configuration - Update this with your Railway backend URL after deployment
-const API_URL = 'https://your-backend-url.railway.app';
+const API_URL = 'https://imageserversyncgram.up.railway.app';
 
 const fileInput = document.getElementById('fileInput');
 const fileLabel = document.getElementById('fileLabel');
