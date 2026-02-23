@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, redirect
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
@@ -28,7 +28,7 @@ def index():
         'api': '/api',
         'endpoints': {
             'upload': 'POST /upload or POST /api/upload',
-            'view': 'GET /images/<filename>'
+            'view': 'GET /files/<filename>'
         }
     })
 
@@ -41,7 +41,7 @@ def api_info():
     base = request.host_url.rstrip('/')
     return jsonify({
         'name': 'Image & File Hosting API',
-        'version': '1.0',
+        'version': '1.1',
         'base_url': base,
         'endpoints': {
             'upload': {
@@ -54,7 +54,7 @@ def api_info():
             },
             'get_file': {
                 'method': 'GET',
-                'path': '/images/<filename>',
+                'path': '/files/<filename>',
                 'description': 'Retrieve an uploaded file by filename (from upload response)'
             }
         },
@@ -86,17 +86,25 @@ def upload_file():
 
     # Get the base URL (will work on Railway)
     base_url = request.host_url.rstrip('/')
-    image_url = f"{base_url}/images/{unique_filename}"
+    file_url = f"{base_url}/files/{unique_filename}"
 
     return jsonify({
         'success': True,
-        'url': image_url,
+        'url': file_url,
         'filename': unique_filename
     }), 201
 
-@app.route('/images/<filename>')
-def serve_image(filename):
+
+@app.route('/files/<filename>')
+def serve_file(filename):
+    """Serve any uploaded file (images and PDFs)."""
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/images/<filename>')
+def serve_image_redirect(filename):
+    """Redirect old /images/ URLs to /files/ for backward compatibility."""
+    return redirect(f"/files/{filename}", code=302)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

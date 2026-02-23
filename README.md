@@ -63,7 +63,7 @@ See [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md) for detailed instructions.
 2. Client sends the file to `POST /upload` or `POST /api/upload`
 3. Backend saves the file with a unique UUID filename
 4. Backend returns a public URL
-5. User can share the URL; files are served via `GET /images/<filename>`
+5. User can share the URL; files are served via `GET /files/<filename>` (old `/images/<filename>` URLs redirect to `/files/` for backward compatibility)
 
 ## Exposeable API
 
@@ -80,7 +80,7 @@ API discovery: returns endpoints, allowed types, and usage.
   "base_url": "https://your-backend.railway.app",
   "endpoints": {
     "upload": { "method": "POST", "path": "/api/upload", ... },
-    "get_file": { "method": "GET", "path": "/images/<filename>", ... }
+    "get_file": { "method": "GET", "path": "/files/<filename>", ... }
   },
   "allowed_types": ["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp", "ico", "pdf"]
 }
@@ -95,15 +95,18 @@ Upload an image or PDF.
 ```json
 {
   "success": true,
-  "url": "https://your-backend.railway.app/images/abc123.pdf",
+  "url": "https://your-backend.railway.app/files/abc123.pdf",
   "filename": "abc123.pdf"
 }
 ```
 
-### `GET /images/<filename>`
+### `GET /files/<filename>`
 Retrieve an uploaded file (image or PDF).
 
 **Response**: File with appropriate `Content-Type`
+
+### `GET /images/<filename>` (legacy)
+Redirects to `/files/<filename>`. Kept so old shared links still work.
 
 ## Environment Variables
 
