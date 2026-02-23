@@ -30,12 +30,15 @@ function App() {
     setIsDragging(false)
   }
 
+  const isAllowedFile = (file) =>
+    file && (file.type.startsWith('image/') || file.type === 'application/pdf')
+
   const handleDrop = (e) => {
     e.preventDefault()
     setIsDragging(false)
 
     const file = e.dataTransfer.files[0]
-    if (file && file.type.startsWith('image/')) {
+    if (isAllowedFile(file)) {
       setSelectedFile(file)
       setError('')
       setUploadedUrl('')
@@ -46,7 +49,7 @@ function App() {
       dataTransfer.items.add(file)
       fileInput.files = dataTransfer.files
     } else {
-      setError('Please drop an image file')
+      setError('Please drop an image or PDF file')
     }
   }
 
@@ -99,8 +102,8 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Image Hosting Service</h1>
-      <p className="subtitle">Upload your image and get a shareable URL</p>
+      <h1>Image & File Hosting</h1>
+      <p className="subtitle">Upload images or PDFs and get a shareable URL</p>
 
       <div className="upload-section">
         {!uploadedUrl ? (
@@ -115,7 +118,7 @@ function App() {
                 <input
                   type="file"
                   id="fileInput"
-                  accept="image/*"
+                  accept="image/*,.pdf,application/pdf"
                   onChange={handleFileSelect}
                   required
                 />
@@ -140,10 +143,10 @@ function App() {
                   </svg>
                   <span>
                     {isDragging
-                      ? 'Drop image here'
+                      ? 'Drop image or PDF here'
                       : selectedFile
                         ? selectedFile.name
-                        : 'Click or drag & drop an image'}
+                        : 'Click or drag & drop an image or PDF'}
                   </span>
                 </label>
               </div>
@@ -151,7 +154,7 @@ function App() {
                 type="submit"
                 disabled={!selectedFile || uploading}
               >
-                {uploading ? 'Uploading...' : 'Upload Image'}
+                {uploading ? 'Uploading...' : 'Upload'}
               </button>
             </form>
 
@@ -185,11 +188,19 @@ function App() {
                 {copied ? 'Copied!' : 'Copy'}
               </button>
             </div>
-            <div className="preview">
-              <img src={uploadedUrl} alt="Uploaded" />
-            </div>
+            {uploadedUrl.endsWith('.pdf') ? (
+              <div className="preview preview-pdf">
+                <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
+                  Open PDF
+                </a>
+              </div>
+            ) : (
+              <div className="preview">
+                <img src={uploadedUrl} alt="Uploaded" />
+              </div>
+            )}
             <button onClick={handleUploadAnother} className="upload-another">
-              Upload Another Image
+              Upload Another
             </button>
           </div>
         )}

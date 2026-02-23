@@ -195,6 +195,25 @@ button[type="submit"]:disabled {
   display: block;
 }
 
+.preview-pdf {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.preview-pdf a {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #667eea;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.preview-pdf a:hover {
+  background: #764ba2;
+}
+
 .upload-another {
   background: white;
   color: #667eea;

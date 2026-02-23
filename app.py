@@ -10,7 +10,7 @@ CORS(app)
 # Configuration
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', './uploads')
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico', 'pdf'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
@@ -24,13 +24,45 @@ def allowed_file(filename):
 @app.route('/')
 def index():
     return jsonify({
-        'message': 'Image hosting service is running',
+        'message': 'Image & file hosting service is running',
+        'api': '/api',
         'endpoints': {
-            'upload': 'POST /upload',
+            'upload': 'POST /upload or POST /api/upload',
             'view': 'GET /images/<filename>'
         }
     })
 
+
+# --- Exposeable API ---
+
+@app.route('/api')
+def api_info():
+    """API discovery and documentation for external clients."""
+    base = request.host_url.rstrip('/')
+    return jsonify({
+        'name': 'Image & File Hosting API',
+        'version': '1.0',
+        'base_url': base,
+        'endpoints': {
+            'upload': {
+                'method': 'POST',
+                'path': '/api/upload',
+                'description': 'Upload an image (PNG, JPG, GIF, WebP, SVG, BMP, ICO) or PDF',
+                'request': 'multipart/form-data with field "file"',
+                'max_size_mb': 50,
+                'response': {'success': True, 'url': '<public URL>', 'filename': '<uuid>.<ext>'}
+            },
+            'get_file': {
+                'method': 'GET',
+                'path': '/images/<filename>',
+                'description': 'Retrieve an uploaded file by filename (from upload response)'
+            }
+        },
+        'allowed_types': list(ALLOWED_EXTENSIONS)
+    })
+
+
+@app.route('/api/upload', methods=['POST'])
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
