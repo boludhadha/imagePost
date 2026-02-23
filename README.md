@@ -76,7 +76,7 @@ API discovery: returns endpoints, allowed types, and usage.
 ```json
 {
   "name": "Image & File Hosting API",
-  "version": "1.0",
+  "version": "1.1",
   "base_url": "https://your-backend.railway.app",
   "endpoints": {
     "upload": { "method": "POST", "path": "/api/upload", ... },
